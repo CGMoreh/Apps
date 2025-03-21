@@ -50,21 +50,6 @@ let userGameData = [];
 // Store aggregated data for all users
 let allGameData = JSON.parse(localStorage.getItem('allGameData')) || [];
 
-function sendDataToGoogleSheet(data) {
-  const url = 'https://script.google.com/macros/library/d/1tcGhw-TEXdw7b3oEOuiHr6LCzfOrBhgLCSVUUEVPBqTCRVql56alyLKf/1'; // Replace with your Google Apps Script URL
-
-  fetch(url, {
-      method: 'POST',
-      mode: 'no-cors',  // Required for Google Apps Script
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-  })
-  .then(() => console.log("Data successfully sent to Google Sheets"))
-  .catch(err => console.error("Error sending data:", err));
-}
-
 function recordGameData(stayOrSwitch, winOrLose) {
     const gameData = {
         timestamp: new Date().toISOString(),
@@ -75,9 +60,6 @@ function recordGameData(stayOrSwitch, winOrLose) {
     userGameData.push(gameData);
     allGameData.push(gameData);
     localStorage.setItem('allGameData', JSON.stringify(allGameData));
-
-    // Send data to Google Sheets
-    sendDataToGoogleSheet([gameData]);
 }
 
 function downloadCSV(data, filename) {
