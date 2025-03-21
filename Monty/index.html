@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta name="description" content="A simple interactive Monty Hall problem simulator.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <title>Choco Monty</title>
+  <link href='styles/styles.css' rel='stylesheet' type='text/css'/>
+  <!-- The preload value of the <link> element's rel attribute lets you declare fetch requests in the HTML's <head>, specifying resources that your page will need very soon, which you want to start loading early in the page lifecycle, before browsers' main rendering machinery kicks in. This ensures they are available earlier and are less likely to block the page's render, improving performance. Even though the name contains the term load, it doesn't load and execute the script but only schedules it to be downloaded and cached with a higher priority.-->
+  <link rel="preload" as="image" href="assets/chocolate.avif">
+  <link rel="preload" as="image" href="assets/sadcat1.webp">
+  <link rel="preload" as="image" href="assets/sadcat2.jpg">
+  <link href='styles/door1hov.css' id='hoversheet12' rel='stylesheet' type='text/css'/>
+  <link href='styles/door2hov.css' id='hoversheet22' rel='stylesheet' type='text/css'/>
+  <link href='styles/door3hov.css' id='hoversheet32' rel='stylesheet' type='text/css'/>
+</head>
+
+<body>
+  <div class="content">
+    <h1 class="title"><span class="titlespan" onclick="reset()">The 'Monty Hall Problem'</span></h1>
+    <div id="rulesDialog" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title">The Rules of the Game</h2>
+          <button id="rulesClose">&times;</button>
+        </div>
+        <ul>
+          <li>Suppose	you’re on a	game	show,	and	you’re	given	the	choice	of	three	doors.	Behind	one	of the doors there is a <b>box of chocolates</b>. Behind the others,	 there are <b>sad cat faces</b>. Your aim is to win the box of chocolates by opening the door that hides it.</li>
+          <li>As a first step, you pick	a	door, say	 <strong>door #1</strong>. Then the	host,	who knows	what’s	behind	all the	doors, opens another door that hides a sad cat face, say	<strong>door #3</strong>.</li> 
+          <li>The host asks you: ‘Do you want to stick with your original choice, or would you rather switch to <strong>door #2</strong>?’</li> 
+          <li class="last-li">Is it	to your	advantage	to switch	doors?</li>
+        </ul>
+      </div>
+    </div>
+    <div id="aboutDialog" class="modal">
+      <div class="modal-content-wide">
+        <div class="modal-header">
+          <h2 class="modal-title">Background</h2>
+          <button id="aboutClose">&times;</button>
+        </div>
+        <p>The setup of this game originates in an old American televised game show called <a href="https://en.wikipedia.org/wiki/Let%27s_Make_a_Deal"><i>Let's Make a Deal</i></a>. The background image captures a scene from that show, with the host, Monty Hall, in the foreground. Contestants on the show faced the same decision of whether to switch doors or not, although in their case the odds were higher: the grand prize was a car!</p>
+        <p>The so-called "Monty Hall problem" was raised in a <a href="https://www.jstor.org/stable/2683689?seq=1#page_scan_tab_contents"><i>Letter to the Editor</i> in the journal <i>American Statistician</i></a> already in 1975, but the choice faced by the contenstants became a more widely famous probability puzzle in 1990, when the question of whether changing one's original choice made any difference was submitted by a reader to a popular Sunday newspaper advice column run by writer Marilyn vos Savant. Marilyn's answer was that one should always switch doors, but her reasoning was aggressively dismissed by most professional mathematicians and statisticians who took a stance in the ensuing public debate. Even <a href="https://www.scientificamerican.com/article/this-nomadic-eccentric-was-the-most-prolific-mathematician-in-history/">Paul Erdős, one	of the most brilliant mathematicians of the time</a>, could not be convinced of the solution until he was shown a computer simulation of the winning strategy. </p>
+        <p>The problem has not stopped puzzling new generations of people coming across it. Author and mathematician Jason Rosenhouse has dedicated an entire book to <a href="https://global.oup.com/academic/product/the-monty-hall-problem-9780195367898?cc=gb&lang=en&"><i>Monty Hall Problem</i></a> in 2009. </p>
+        <p>As computer scientist Judea Pearl has argued, 'the	key	element	in	resolving	this	paradox	is	that	we	need	to	take	into account	not	only	the	data	(i.e.,	the	fact	that	the	host	opened	a	particular	door) but	also	the	data-generating	process — in	other	words,	the	rules	of	the	game' <a href="https://www.penguin.co.uk/books/289825/the-book-of-why-by-judea-pearl-and-dana-mackenzie/9780141982410">(2018)</a>.</p>
+      </div>
+    </div>
+    <div id="statsDialog" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title">Your Game Stats</h2>
+          <button id="statsClose">&times;</button>
+        </div>
+        <p id="statsContent">
+        </p>
+      </div>
+    </div>
+    <div class="buttons">
+      <button id="rulesButton">Rules</button>
+      <button id="aboutButton">Background</button>
+      <button id="statsButton" onclick="stats()">Stats</button>
+      <button id="resetButton" class="reset" onclick="reset()">Reset</button>
+    </div>
+    <div class="doors" id="doors">
+      <div class="door" id="door1" onclick="play(1)"><b class="doortitle">Door #1</b></div>
+      <div class="door" id="door2" onclick="play(2)"><b class="doortitle">Door #2</b></div>
+      <div class="door" id="door3" onclick="play(3)"><b class="doortitle">Door #3</b></div>
+    </div>
+    <div class="doors2" id="doors2">
+      <div class="door2" id="door12" onclick=""><b class="doortitle">Door #1</b class="doortitle"></div>
+      <div class="door2" id="door22" onclick=""><b class="doortitle">Door #2</b class="doortitle"></div>
+      <div class="door2" id="door32" onclick=""><b class="doortitle">Door #3</b class="doortitle"></div>
+    </div>
+    <div class="messageContainer">
+      <p id="message">Click on any door above to play!</p>
+    </div>
+    <div class="buttons">
+      <button id="downloadSessionData" onclick="stats()">Download my session data</button>
+      <button id="downloadAllUserData" onclick="stats()">Download all my data</button>
+    </div>
+  </div>
+  <script src='scripts/index.js'></script>
+</body>
+
+</html>
